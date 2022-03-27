@@ -8,13 +8,15 @@ from sqlalchemy.orm import Session
 
 from . import schemas, models
 from .database import get_db
+from .config import auth_config
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-SECERT_KEY: str = os.environ["SECERT_KEY"]
-ALGORITHM: str = os.environ["ALGORITHM"]
+SECERT_KEY: str = auth_config.SECERT_KEY
+ALGORITHM: str = auth_config.ALGORITHM
 ACCESS_TOKEN_EXPIRATION_TIME_IN_MINUES: int = int(
-    os.environ["ACCESS_TOKEN_EXPIRATION_TIME_IN_MINUES"]
+    auth_config.ACCESS_TOKEN_EXPIRATION_TIME_IN_MINUES
 )
 
 
@@ -43,7 +45,9 @@ def verify_access_token(token: str, credentials_exception):
     return token_data
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

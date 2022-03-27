@@ -1,4 +1,13 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, text, TIMESTAMP
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    Integer,
+    String,
+    text,
+    TIMESTAMP,
+    ForeignKey,
+)
 
 from .database import Base
 
@@ -8,6 +17,12 @@ class Post(Base):
 
     id = Column(
         name="id", type_=Integer, primary_key=True, nullable=False, autoincrement=True
+    )
+    owner_id = Column(
+        ForeignKey("users.id", name="FK_users_posts", ondelete="CASCADE"),
+        name="owner_id",
+        type_=Integer,
+        nullable=False,
     )
     title = Column(name="title", type_=String, nullable=False)
     content = Column(name="content", type_=String, nullable=False)
@@ -56,3 +71,21 @@ class User(Base):
     #     nullable=False,
     #     server_default=text("now()"),False
     # )
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+    post_id = Column(
+        ForeignKey("posts.id", ondelete="CASCADE", name="FK_posts_votes"),
+        name="post_id",
+        type_=Integer,
+        primary_key=True,
+        nullable=False,
+    )
+    user_id = Column(
+        ForeignKey("users.id", ondelete="CASCADE", name="FK_users_votes"),
+        name="user_id",
+        type_=Integer,
+        primary_key=True,
+        nullable=False,
+    )

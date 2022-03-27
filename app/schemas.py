@@ -35,12 +35,19 @@ class User(UserBase):
 
 
 # Response Schemas
-class GetPostResponse(PostBase):
-    created_at: datetime
+class GetPostResponse(BaseModel):
+
+    class Post2(PostBase):
+        created_at: datetime
+
+        class Config:
+            orm_mode = True
+    
+    Post: Post2
+    vote_count: int
 
     class Config:
         orm_mode = True
-
 
 class CreatePostResponse(PostBase):
     created_at: datetime
@@ -69,6 +76,7 @@ class UserLogin(BaseModel):
 
 class TokenData(BaseModel):
     id: int
+
 
 class TokenLoginReponse(BaseModel):
     access_token: str
