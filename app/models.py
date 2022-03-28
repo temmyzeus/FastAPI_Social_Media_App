@@ -7,6 +7,7 @@ from sqlalchemy import (
     text,
     TIMESTAMP,
     ForeignKey,
+    UniqueConstraint
 )
 
 from .database import Base
@@ -50,7 +51,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(
-        name="id", type_=Integer, nullable=False, primary_key=True, autoincrement=True
+        name="id", type_=Integer, nullable=False, primary_key=True, autoincrement=True, unique=True
     )
     email = Column(
         name="email", type_=String, nullable=False, primary_key=True, unique=True
